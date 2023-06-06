@@ -1,0 +1,39 @@
+html {
+height: 100%;
+}
+
+body {
+height: 100%;
+padding-top: 150px;
+background-color: white;
+}
+
+footer {
+height: 70px;
+margin: -70px 0 0 0;
+background-color: #f0f0f0;
+padding: 4px;
+color: #000;
+position: relative;
+}
+
+.footer-left a {
+color: #000;
+margin-right: 20px;
+}
+
+.footer-right a {
+color: #626262;
+margin-left: 20px;
+}
+
+.wrapper {
+min-height: 100%;
+height: auto !important;
+}
+
+
+
+
+
+

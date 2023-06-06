@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/style.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static '/css/bootstrap.min.css' %}"/>
+
+    <title>code search</title>
+    <link rel="icon" href="{% static 'img/title_icon.jpg' %}">
+
+</head>
+
+<body>
+
+    <div class="container wrapper">
+    <dev>
+
+        <nav class="navbar navbar-expand fixed-top navbar-light">
+        <div class="container pl-3">
+        <a class="navbar-brand mb-0 h1">
+            <div id="mainlogo">
+                <p class="font-weight-bold" id="upside">F I N D C O D E</p>
+                <div class="d-flex">
+                    <div class="d-inline-block" id="blocklogo"></div>
+                    <p class="d-inline-block" id="lowside">UKRAINE</p>
+                </div>
+            </div>
+        </a>
+
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav">
+                <li class="nav-item ">
+                    <a href="/index" class="nav-link active">Search</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/files" class="nav-link">Convertors</a>
+                </li>
+                <li class="nav-item active">
+                    <a href="/nomenclature" class="nav-link">Nomenclature</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/invoice" class="nav-link">Invoice</a>
+                </li>
+            </ul>
+
+        </div>
+        </div> <!-- /container -->
+        </nav>
+
+        <div id="form" class="mb-5" style="background-color: #FFC700; padding: 20px">
+            <form action="{% url 'hscode' %}" method="get" class="mb-5">
+                {% csrf_token %}
+	            <h2 style="padding-bottom: 20px">START YOUR SEARCH</h2>
+                <div class="d-flex">
+                    <input id="inputsearch" class="container-fluid" type="text" name="q" placeholder="Enter the query"></input>
+                    <button id="buttonsearch" class="btn btn-secondary btn-lg" type="submit">SEARCH</button>
+                </div>
+
+            </form>
+            <p><img src="{% static 'img/info-square-fill.svg' %}" >&emsp;SAMPLE SEARCH REQUEST:&emsp;&emsp;by commodity code: 8302300090&emsp;&emsp;by commodity description: electric generator</p>
+        </div>
+
+        <div style="padding-bottom: 200px;">
+            {% block content %}
+            {% if goods.0 == "zero" %}
+            <div id="noneresults" >
+                <div class="d-flex">
+                    <table>
+                        <td>
+                            <img id="iconsvg" src="{% static 'img/search_icon.png' %}" style="height: 25px;" >
+                        </td>
+                        <td>
+                            <p id="noneresults_p1">Nothing was found for your request</p>
+                        </td>
+                    </table>
+                </div>
+            <p id="noneresults_p2">Change the request and try again</p>
+            </div>
+            {% elif goods == None  %}
+            <div id="noneresults" >
+                <div class="d-flex">
+                    <table>
+                        <td>
+                            <img id="iconsvg" src="{% static 'img/search_icon.png' %}" style="height: 25px;" >
+                        </td>
+                        <td>
+                            <p id="noneresults_p1">No search request specified</p>
+                        </td>
+                    </table>
+                </div>
+            <p id="noneresults_p2">Enter your details and try again</p>
+            </div>
+            {% else %}
+            <p>On request <b>"{{goods.2}}"</b> items found: &emsp; <b>{{goods.1}}</b></p>
+            {% for key, value in goods.3.items %}
+            {% for i in goods.0 %}
+            {% if key == i.id %}
+            {% if value > 1 %}
+
+            <div class="border mb-3 rounded bg-light border-secondary">
+                <table class="table table-striped">
+                    <thead >
+                        <tr>
+                            <td scope="col" class="col-1">request compliance</td>
+                            <td scope="col" class="col-6">{{value}} %</td>
+
+                        </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                        <tr>
+                            <td>HS code</td>
+                            <td><b>{{i.code}}</b></td>
+                        </tr>
+                        <tr>
+                            <td>customs fee</td>
+                            <td>
+                                {% for key, value in goods.4.items %}
+                                {% if key == i.id %}
+                                {{value.0.duty_full}} % <small>(full)</small>&emsp;&emsp;{{value.0.duty_preferential}} % <small>(preferential)</small>
+                                {% endif %}
+                                {% endfor %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>commodity description</td>
+                            <td>{{i.description}}</td>
+                        </tr>
+                        <tr>
+                            <td>source</td>
+                            <td>{{i.source}}</td>
+                        </tr>
+                        <tr>
+                            <td>date</td>
+                            <td>{{i.date}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            {% endif %}
+            {% endif %}
+            {% endfor %}
+            {% endfor %}
+            {% endif %}
+            {% endblock %}
+        </div>
+
+    </dev>
+    <script src="{% static 'index/js/bootstrap.min.js' %}" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+
+    </div> <!-- /container -->
+
+    <footer class="footer">
+        <div class="container">
+            <div class="d-sm-flex justify-content-between">
+                <div class="footer-left">
+                    <p class="font-weight-bold">COMMODITY CODE SEARCH</p>
+                    <br><br>
+                    <p>findcode ukraine 2022</p>
+                </div>
+                <div class="footer-right">
+                    <span class="font-weight-bold">CONTACTS</span>
+                    <p></p>
+                    <p>Ukraine, 04070, Kyiv city<br>Python Developers str 3, office 4<br>email: office@findcode.com.ua</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+</body>
+</html>
