@@ -1,5 +1,5 @@
 # commodity-code
-Django Web App project
+Django Web App project for searching samples of customs clearance of goods in the database. (Django + SQL)
 
 ### ADDITIONAL EXTANTIONS AND PACKAGES:
 -  django-bootstrap-icons==0.8.2
